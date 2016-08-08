@@ -2,7 +2,7 @@ FROM alpine:latest
 
 ENV GOPATH=/go \
     SRCPATH=${GOPATH}/src/github.com/adnanh \
-    WEBHOOK_VERSION=2.3.8 
+    WEBHOOK_VERSION=2.4.0
 
 RUN apk add --no-cache \
     curl \
