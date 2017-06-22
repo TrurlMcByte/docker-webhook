@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.4
 
 ENV GOPATH=/go \
     SRCPATH=${GOPATH}/src/github.com/adnanh \
