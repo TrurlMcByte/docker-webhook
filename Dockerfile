@@ -1,29 +1,14 @@
-FROM alpine:3.4
-
-ENV GOPATH=/go \
-    SRCPATH=${GOPATH}/src/github.com/adnanh \
-    WEBHOOK_VERSION=2.6.0
+FROM  golang:alpine
 
 RUN apk add --no-cache \
     curl \
     git \
+    jq \
+    busybox-extras \
+    bash \
     openssh-client \
-  && apk add --no-cache -t build-deps \
-    gcc \
-    go \
-    libc-dev \
-    libgcc \
-  && curl -s -L -o /tmp/webhook-${WEBHOOK_VERSION}.tar.gz https://github.com/adnanh/webhook/archive/${WEBHOOK_VERSION}.tar.gz \
-  && mkdir -p ${SRCPATH} \
-  && tar -xvzf /tmp/webhook-${WEBHOOK_VERSION}.tar.gz -C ${SRCPATH} \
-  && mv -f ${SRCPATH}/webhook-* ${SRCPATH}/webhook \
-  && cd ${SRCPATH}/webhook \
-  && go get -d \
-  && go build -o /usr/local/bin/webhook \
-  && apk del --purge build-deps \
-  && rm -rf ${GOPATH}
-
-#  && rm -rf /var/cache/apk/* \
+  && go get github.com/adnanh/webhook \
+  && go get github.com/digitalocean/doctl/cmd/doctl
 
 EXPOSE 9000
-ENTRYPOINT ["/usr/local/bin/webhook"]
+ENTRYPOINT ["/go/bin/webhook"]
