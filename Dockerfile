@@ -12,7 +12,6 @@ RUN apk add --no-cache git \
  && go get -ldflags="-w -s" github.com/adnanh/webhook \
  && go get -ldflags="-w -s" github.com/digitalocean/doctl/cmd/doctl
 
-
 FROM alpine:latest
 
 RUN apk add --no-cache \
@@ -24,9 +23,11 @@ RUN apk add --no-cache \
     file \
     openssh-client \
   && KUBERNETES_VERSION=`curl -sL https://storage.googleapis.com/kubernetes-release/release/stable.txt` \
-  && curl -sfLO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl  \
+  && cd /bin \
+  && curl -sfLO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl \
   && chmod +x ./kubectl \
-  && mv ./kubectl /bin/kubectl
+  && curl -sfL https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 -o /bin/skaffold \
+  && chmod +x skaffold
 
 COPY --from=builder /go/bin/* /go/bin/
 

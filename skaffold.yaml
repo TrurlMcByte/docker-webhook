@@ -1,0 +1,12 @@
+apiVersion: skaffold/v2alpha1
+kind: Config
+build:
+  artifacts:
+  - image: trurlmcbyte/webhook
+    kaniko:
+      buildContext:
+        localDir: {}
+  cluster:
+    namespace: default
+    dockerConfig:
+      secretName: dockerhub-secret
