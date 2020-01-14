@@ -27,7 +27,10 @@ RUN apk add --no-cache \
   && curl -sfLO https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl \
   && chmod +x ./kubectl \
   && curl -sfL https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 -o /bin/skaffold \
-  && chmod +x skaffold
+  && chmod +x skaffold \
+  && curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases | \
+    grep browser_download | grep linux_amd64 | cut -d '"' -f 4 | grep /kustomize/v | sort | tail -n 1 | \
+    xargs curl -sL | tar xz
 
 COPY --from=builder /go/bin/* /go/bin/
 
